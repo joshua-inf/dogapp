@@ -10,7 +10,7 @@ import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
 import MainPetsPages from '../Screens/MyPetsPages/mainPetsPages';
 import { useContext } from 'react';
-import { Context } from '../App';
+import { Context } from '../Authcontext/authcontext';
 import { Text } from 'react-native';
 
 
@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 
 
 function MyDrawer() {
-    const  {userRole}  = useContext(Context)
+    const  {useinfo}  = useContext(Context)
 
     
     return (
@@ -37,7 +37,7 @@ function MyDrawer() {
                 <Drawer.Screen name="Home" component={Home} />
 
                 {
-                 userRole == 'admin' ? 
+                 useinfo.role == 'petOwner' ? 
                 <Drawer.Screen name="My Pets" component={MainPetsPages} />
                 :
                 <></>

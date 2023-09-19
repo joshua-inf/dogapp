@@ -3,11 +3,14 @@ import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawe
 import { SafeAreaInsetsContext } from "react-native-safe-area-context"
 import { useContext } from "react"
 import { FIREBASE_AUTH } from "../fierbaseconfig/firebaseconfig"
-import { Context } from "../App"
+import { Context } from "../Authcontext/authcontext"
 
 
 const CustomDrawer = (props) => {
-    const {uid, getUser} = useContext(Context);
+    const {uid, getUser, setNames, setUid, setMypets, setUseinfo} = useContext(Context);
+    const logout = () => {
+        FIREBASE_AUTH.signOut()
+    }
 
     return (
         <SafeAreaInsetsContext.Consumer>
@@ -40,7 +43,7 @@ const CustomDrawer = (props) => {
                             <DrawerItemList {...props} />
                         </DrawerContentScrollView>
                         <View style={{ padding: 10 }}>
-                            <Button onPress={getUser} title='Log out' />
+                            <Button onPress={logout} title='Log out' />
                         </View>
                     </View>
             }
