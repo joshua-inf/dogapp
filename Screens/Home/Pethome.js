@@ -1,21 +1,22 @@
-import { Button, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Pets from "../../components/Pets";
 import { useContext, useEffect } from 'react'
 import { Context } from "../../Authcontext/authcontext";
 
 
 function Home({navigation}) {
-  const {mypets, useinfo, alerts,  setImagebeingviewd, uid} = useContext(Context)
+  const {mypets, useinfo, alerts,  setImagebeingviewd, uid, Loadingpage,setLoader, loader} = useContext(Context)
 
 //these are the views on the home page that are specific to the users role
   const ShowPets =() => {
     if(useinfo.role == 'petOwner'){
+      setLoader(true)
       
       let thatpets = mypets.filter((data) => data.ownerid == uid)
       return thatpets.map((i, values) => {
         return (
           <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
               <View style={{
                 flexDirection: 'row',
               }}>
@@ -109,11 +110,12 @@ function Home({navigation}) {
         )
       })
     } else if(useinfo.role =='Vet'){
+      setLoader(true)
+
       return mypets.map((i, values) => {
 
         return (
-          <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
               <View style={{
                 flexDirection: 'row',
               }}>
@@ -188,8 +190,8 @@ function Home({navigation}) {
                 </View>
               </View>
               <View>
-              {i.practitionercomments != '' ?
-              <View>
+              {i.practitionercomments ?
+              <View style={{padding:20}}>
               <Text style={{ fontWeight: 'bold' }}>Practitioners comment:</Text>
                 <Text>
                 {i.practitionercomments}
@@ -211,16 +213,17 @@ function Home({navigation}) {
               }
               </View>
             </View>
-          </>
         )
       })
     } else if(useinfo.role == 'Officer'){
+      setLoader(true)
+
       const filteredpets = mypets.filter((val) => new Date(val.dateofnextvaccine).getTime() > new Date().getTime() && val.vaccinated != 'Yes' )
       return filteredpets.map((i, values) => {
         console.log(i.vaccinated)
         return (
           <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
               <View style={{
                 flexDirection: 'row',
               }}>
@@ -256,6 +259,10 @@ function Home({navigation}) {
                         <View style={{ flexDirection: 'row' }}>
                           <Text style={[styles.Text1]}>weight: </Text>
                           <Text style={[styles.Text]}>{i.weight}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={[styles.Text1]}>address: </Text>
+                          <Text style={[styles.Text]}>{i.address}</Text>
                         </View>
                       </View>
   
@@ -308,7 +315,11 @@ function Home({navigation}) {
   return (
     <ScrollView style={{backgroundColor: '#1077f0',  height: '100%'}}>
       <View style={{ padding: 10, flexDirection: 'column', gap: 20 }}>
-        {ShowPets()}
+        {!loader ?
+          <ActivityIndicator size='large' color='#ddd' />
+          :
+          <>{ShowPets()}</>}
+
       </View>
     </ScrollView>
   );

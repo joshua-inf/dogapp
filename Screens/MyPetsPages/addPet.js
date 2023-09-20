@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from "react"
-import { Button, KeyboardAvoidingView, ScrollView, Text, TextInput, View, useColorScheme } from "react-native"
+import { Button, Image, KeyboardAvoidingView, ScrollView, Text, TextInput, View, useColorScheme } from "react-native"
 import { Context } from "../../Authcontext/authcontext"
 import * as SQLite from 'expo-sqlite'
+import * as ImagPicker from 'expo-image-picker';
 
 const AddPets = () => {
 
@@ -15,6 +16,7 @@ const AddPets = () => {
     const [color, setColor] = useState(undefined)
     const [comments, setComments] = useState('')
     const [address, setAddress] = useState(undefined)
+    const [image, setImage] = useState(null)
     const [myPets, setMyPets] = useState([])
 
     const sqlDb = SQLite.openDatabase('myPets')
@@ -25,6 +27,21 @@ const AddPets = () => {
     const createTabel = () => {
 
     }
+
+
+    const pickImage = async () => {
+        let result  = await ImagPicker.launchImageLibraryAsync({
+          mediaTypes: ImagPicker.MediaTypeOptions.All,
+          allowsEditing:true,
+          aspect: [4,4],
+          quality:1
+        });
+        if(!result.canceled){
+          setImage(result.assets[0].uri)
+        }
+      }
+    
+
     const Clear = () => {
         setAge(undefined)
         setSpecies(undefined)
@@ -33,6 +50,7 @@ const AddPets = () => {
         setColor(undefined)
         setName(undefined)
         setBread(undefined)
+        setImage(null)
         setAddress(undefined)
         setComments(undefined)
     }
@@ -54,9 +72,15 @@ const AddPets = () => {
                 <ScrollView>
                     <View style={{ backgroundColor: '#ddd', padding: 35 }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 3, backgroundColor: '#333', height: 200 }}></View>
+                            <View style={{ flex: 3, backgroundColor: '#333', height: 200, overflow:'hidden'}}>
+                                {image ?
+                                    <Image source={{ uri: image }} style={{ height: 200 }} />
+                                    :
+                                    <></>
+                                }
+                            </View>
                             <View style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'center' }}>
-                                <Button title="click to add an image" />
+                                <Button onPress={pickImage} title="click to add an image" />
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 20, }}>

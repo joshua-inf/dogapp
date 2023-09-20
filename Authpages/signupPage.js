@@ -29,7 +29,8 @@ const SignupPage = ({ navigation }) => {
                 name: 'john doe',
                 phone: '+260*******',
                 gender: 'unspecified',
-                address:''
+                address:'',
+                image:''
             });
             console.log('document written with id: ', docRef);
         } catch (e) {

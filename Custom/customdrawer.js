@@ -7,9 +7,12 @@ import { Context } from "../Authcontext/authcontext"
 
 
 const CustomDrawer = (props) => {
-    const {uid, getUser, setNames, setUid, setMypets, setUseinfo} = useContext(Context);
+    const {uid, getUser, setNames, setUid, setMypets, setUseinfo, setMyPets} = useContext(Context);
+
     const logout = () => {
         FIREBASE_AUTH.signOut()
+        setUid(undefined)
+        setMyPets([])
     }
 
     return (

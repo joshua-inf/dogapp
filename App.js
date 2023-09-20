@@ -41,16 +41,15 @@ const Loadingpage  = () => {
     // getDataFromFirebase()
     
     sqlDb.transaction((tx) => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS pets (id INTEGER PRIMARY KEY AUTOINCREMENT,address TEXT,  comments TEXT, name TEXT, species TEXT, age TEXT, weight TEXT, bread TEXT, gender TEXT, color TEXT, ownerid TEXT, vaccine TEXT, dose TEXT, dateoflastvaccine TEXT, dateofnextvaccine TEXT, practitionercomments TEXT, vaccinated TEXT)', null, 
+      tx.executeSql('CREATE TABLE IF NOT EXISTS pets (id INTEGER PRIMARY KEY AUTOINCREMENT,address TEXT,image TEXT,  comments TEXT, name TEXT, species TEXT, age TEXT, weight TEXT, bread TEXT, gender TEXT, color TEXT, ownerid TEXT, vaccine TEXT, dose TEXT, dateoflastvaccine TEXT, dateofnextvaccine TEXT, practitionercomments TEXT, vaccinated TEXT)', null, 
       (txObj, resultSet) => console.log('success in creating the pet table'),
       (txObj, error) => console.log(error))
     });
     // sqlDb.transaction(tx => {
-    //   tx.executeSql('ALTER TABLE pets ADD address TEXT', null, 
+    //   tx.executeSql('ALTER TABLE pets ADD image TEXT', null, 
     //   () => console.log('table added'))
     // })
     //this sql 
-    getPets()
 
   }, [])
 
@@ -126,7 +125,7 @@ const Loadingpage  = () => {
 
 
   return (
-    <Context.Provider value={{ getUser, setNames,updatePets, Loadingpage,setLoader, loader, uid,useinfo, setUid, userRole, names, mypets, addName, setMyPets, alerts,imagebeingviewd, setImagebeingviewd,deleteCol }}>
+    <Context.Provider value={{ getUser, setNames,updatePets,getPets, Loadingpage,setLoader, loader, uid,useinfo, setUid, userRole, names, mypets,setMyPets, addName, setMyPets, alerts,imagebeingviewd, setImagebeingviewd,deleteCol }}>
       <Body />
     </Context.Provider>
   );

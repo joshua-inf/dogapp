@@ -1,10 +1,12 @@
-import { Button, Pressable, ScrollView, Text, View, ActivityIndicator } from "react-native";
+import { Button, Pressable, ScrollView, Text, View, ActivityIndicator, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useContext, useState } from 'react'
 import { Context } from "../Authcontext/authcontext";
 import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../fierbaseconfig/firebaseconfig";
 import * as filesystem from 'expo-file-system';
+import * as ImagPicker from 'expo-image-picker';
+
 
 
 
@@ -15,6 +17,7 @@ function Accounts() {
   const [phone, setPhone] = useState(undefined)
   const [gender, setGender] = useState(undefined)
   const [role, setRole] = useState(undefined)
+  const [image, setImage] = useState(null)
   const [address, setAddress] = useState(undefined)
   const [myUpdatedDetails, setMyUpdatedDetails] = useState({})
 
@@ -22,12 +25,27 @@ function Accounts() {
 
   //this function changes to true if any of the values have been changed and makes the update button clickeable
   const checkStatus = () => {
-    if (name || email || phone || gender || role || address) {
+    if (name || email || phone || gender || role || address || image) {
       return true
     } else {
       return false
     }
   }
+
+
+  const pickImage = async () => {
+    let result  = await ImagPicker.launchImageLibraryAsync({
+      mediaTypes: ImagPicker.MediaTypeOptions.All,
+      allowsEditing:true,
+      aspect: [4,4],
+      quality:1
+    });
+    if(!result.canceled){
+      setImage(result.assets[0].uri)
+    }
+  }
+
+
 
   //this function when called clears the state of the constants
   const clear = () => {
@@ -35,6 +53,7 @@ function Accounts() {
     setName(undefined)
     setPhone(undefined)
     setRole(undefined)
+    setImage(undefined)
     setGender(undefined)
   }
 
@@ -58,6 +77,9 @@ function Accounts() {
     }
     if(address) {
       myUpdatedDetails.address = address
+    }
+    if(image) {
+      myUpdatedDetails.image = image
     }
 
     addUser()
@@ -123,8 +145,15 @@ function Accounts() {
         {loader ?
           <View style={{ padding: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <View style={{ backgroundColor: '#222', height: 150, width: 150, borderRadius: 150 }}></View>
+              <View style={{ backgroundColor: '#222', height: 200, width: 200, borderRadius: 200, overflow:'hidden' }}>
+                {image ? 
+                  <Image source={{uri:image}} style={{height:200}}/>
+                  :
+                  <Image source={{uri:useinfo.image}} style={{height:200}}/>
+                }
+              </View>
             </View>
+              <Button title="select image" onPress={pickImage} />
             <View style={{ padding: 10, gap: 20 }}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{ marginBottom: 'auto', marginTop: 'auto' }}>Name: </Text>
