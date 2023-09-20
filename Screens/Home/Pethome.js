@@ -7,7 +7,7 @@ import { Context } from "../../Authcontext/authcontext";
 function Home({navigation}) {
   const {mypets, useinfo, alerts,  setImagebeingviewd, uid} = useContext(Context)
 
-
+//these are the views on the home page that are specific to the users role
   const ShowPets =() => {
     if(useinfo.role == 'petOwner'){
       
@@ -15,7 +15,7 @@ function Home({navigation}) {
       return thatpets.map((i, values) => {
         return (
           <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
               <View style={{
                 flexDirection: 'row',
               }}>
@@ -109,11 +109,11 @@ function Home({navigation}) {
         )
       })
     } else if(useinfo.role =='Vet'){
-
       return mypets.map((i, values) => {
+
         return (
           <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
               <View style={{
                 flexDirection: 'row',
               }}>
@@ -170,7 +170,7 @@ function Home({navigation}) {
                             <Text style={[styles.Text]}>{i.dose}</Text>
                           </View>
                           <View style={{ flexDirection: 'row' }}>
-                            <Text style={[styles.Text1]}>LastVaccine: </Text>
+                            <Text style={[styles.Text1]}>LastVaccine </Text>
                             <Text style={[styles.Text]}>{new Date(i.dateoflastvaccine).toDateString()}</Text>
                           </View>
                           <View style={{ flexDirection: 'row' }}>
@@ -188,10 +188,17 @@ function Home({navigation}) {
                 </View>
               </View>
               <View>
-                <Text style={{ fontWeight: 'bold' }}>Practitioners comment:</Text>
+              {i.practitionercomments != '' ?
+              <View>
+              <Text style={{ fontWeight: 'bold' }}>Practitioners comment:</Text>
                 <Text>
                 {i.practitionercomments}
                 </Text>
+              </View>
+              :
+              <></>
+              }
+                
               {
                 useinfo.role == 'Vet' ?
                   <View >
@@ -213,7 +220,7 @@ function Home({navigation}) {
         console.log(i.vaccinated)
         return (
           <>
-            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={values}>
+            <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={i.id}>
               <View style={{
                 flexDirection: 'row',
               }}>

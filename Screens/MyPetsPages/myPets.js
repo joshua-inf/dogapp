@@ -26,7 +26,7 @@ function MyPets({ navigation }) {
           {thatmypets.map((e, value) => {
             return (
               <>
-                <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={value}>
+                <View style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 10 }} key={e.id}>
                   <View style={{
                     flexDirection: 'row',
                   }}>

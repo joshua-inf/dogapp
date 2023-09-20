@@ -41,12 +41,12 @@ const Loadingpage  = () => {
     // getDataFromFirebase()
     
     sqlDb.transaction((tx) => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS pets (id INTEGER PRIMARY KEY AUTOINCREMENT,  comments TEXT, name TEXT, species TEXT, age TEXT, weight TEXT, bread TEXT, gender TEXT, color TEXT, ownerid TEXT, vaccine TEXT, dose TEXT, dateoflastvaccine TEXT, dateofnextvaccine TEXT, practitionercomments TEXT, vaccinated TEXT)', null, 
+      tx.executeSql('CREATE TABLE IF NOT EXISTS pets (id INTEGER PRIMARY KEY AUTOINCREMENT,address TEXT,  comments TEXT, name TEXT, species TEXT, age TEXT, weight TEXT, bread TEXT, gender TEXT, color TEXT, ownerid TEXT, vaccine TEXT, dose TEXT, dateoflastvaccine TEXT, dateofnextvaccine TEXT, practitionercomments TEXT, vaccinated TEXT)', null, 
       (txObj, resultSet) => console.log('success in creating the pet table'),
       (txObj, error) => console.log(error))
     });
     // sqlDb.transaction(tx => {
-    //   tx.executeSql('ALTER TABLE pets ADD comments TEXT', null, 
+    //   tx.executeSql('ALTER TABLE pets ADD address TEXT', null, 
     //   () => console.log('table added'))
     // })
     //this sql 

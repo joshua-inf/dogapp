@@ -14,9 +14,11 @@ const SignupPage = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const [role, setRole] = useState(undefined)
     const auth = FIREBASE_AUTH
-    const { uid, setUid } = useContext(Context)
+    const { uid, setUid, getUser } = useContext(Context)
 
     const [customError, setCustomError] = useState({ state: true })
+
+    //this function adds the user details into firebase usind the uid recieved after creating a user
     const addUser = async (uid) => {
         try {
             const thatdata = collection(db, 'users')
@@ -26,7 +28,8 @@ const SignupPage = ({ navigation }) => {
                 role: role,
                 name: 'john doe',
                 phone: '+260*******',
-                gender: 'unspecified'
+                gender: 'unspecified',
+                address:''
             });
             console.log('document written with id: ', docRef);
         } catch (e) {
@@ -34,12 +37,11 @@ const SignupPage = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
-
-    }, [])
+    //this signup function use user input i.e from the email andpassword to create a user with firebase
     const Signup = async () => {
-
-        if (email == '') {
+        //the statements below check if the inputs have values or not, email is a valid email address,if the passwords match or not and issues 
+        //to do with with using the same email and short passwords firebase has it own 
+        if (!email) {
             setCustomError({ state: false, msg: 'email input is empty' })
         } else {
             let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -57,11 +59,16 @@ const SignupPage = ({ navigation }) => {
                         } else{
                             setLoading(true);
                             try {
+
+                                //this a firebase async function that parses the email and password to create a user with a unique uid
                                 const response = await createUserWithEmailAndPassword(auth, email, password);
                                 let uid = response.user.uid
-                                // let myEmails = response.email
+
+                                //this block of functions  uses the user id created by firebase to set the uid and save other auth properties
                                 setUid(uid)
+                                getUser(uid)
                                 addUser(uid)
+                                //====
                                 alert('check your emails')
                             } catch (error) {
                                 console.log(error);

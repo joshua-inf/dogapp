@@ -16,6 +16,7 @@ const MyPetsDetails = () => {
 
 
 
+  //this function when called clears the state of the constants
 const clearSets = () => {
     setName(undefined)
     setWeight(undefined)
@@ -34,6 +35,8 @@ const clearSets = () => {
         }
     }
     
+
+    //this useContext hook get the information and functions passed from parent to child elements to be used throughout the project
     const { imagebeingviewd, mypets, deleteCol,updatePets, setImagebeingviewd } = useContext(Context)
     
     if(imagebeingviewd){

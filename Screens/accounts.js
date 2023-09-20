@@ -15,18 +15,21 @@ function Accounts() {
   const [phone, setPhone] = useState(undefined)
   const [gender, setGender] = useState(undefined)
   const [role, setRole] = useState(undefined)
+  const [address, setAddress] = useState(undefined)
   const [myUpdatedDetails, setMyUpdatedDetails] = useState({})
 
   const { useinfo, uid, getUser, loader, Loadingpage, setLoader } = useContext(Context);
 
-  //this function changes to true if any of the values have been changed
+  //this function changes to true if any of the values have been changed and makes the update button clickeable
   const checkStatus = () => {
-    if (name || email || phone || gender || role) {
+    if (name || email || phone || gender || role || address) {
       return true
     } else {
       return false
     }
   }
+
+  //this function when called clears the state of the constants
   const clear = () => {
     setEmail(undefined)
     setName(undefined)
@@ -34,6 +37,9 @@ function Accounts() {
     setRole(undefined)
     setGender(undefined)
   }
+
+  //in order to only update the fields that have been changed this function when called
+  //checks for input validity and if true that variable is added to an object which is then parsed
   const uploaddata = () => {
     if (name) {
       myUpdatedDetails.name = name
@@ -50,28 +56,55 @@ function Accounts() {
     if (gender) {
       myUpdatedDetails.gender = gender
     }
+    if(address) {
+      myUpdatedDetails.address = address
+    }
+
     addUser()
     setLoader(false)
   }
 
 
-
+//this function is called after the information has already passed through form validation and sends
+//and sends a request to the firbase server to update the user info
   const addUser = async () => {
     try {
       const thatdata = collection(db, 'users')
       const docRef = await updateDoc(doc(thatdata, uid), myUpdatedDetails);
-      console.log('document written with id: ', docRef);
+      alert('upadte successfully made')
       clear();
       setMyUpdatedDetails({})
       getUser(uid)
-      alert('upadte successfully made')
     } catch (e) {
       console.error('Error adding document', e)
     }
   }
 
 
+  const Gender = () => {
+      return (
+        <View>
+        <Text>change gender below</Text>
+        
+        <View style={{flexDirection:'row', justifyContent:'space-evenly', width:'80%'}}>
 
+  
+          {
+            gender == 'male' ?
+              <Button disabled onPress={() => setGender('male')} title='male' />
+              :
+              <Button onPress={() => setGender('male')} title='male' />
+          }
+          {
+            gender == 'female' ?
+              <Button disabled onPress={() => setGender('female')} title='female' />
+              :
+              <Button onPress={() => setGender('female')} title='female' />
+          }
+        </View>
+        </View>
+      )
+  }
 
 
 
@@ -105,20 +138,19 @@ function Accounts() {
                 <Text style={{ marginBottom: 'auto', marginTop: 'auto' }}>Phone: </Text>
                 <TextInput value={phone} onChangeText={setPhone} style={{ backgroundColor: '#bbb', width: 200, borderRadius: 10, padding: 5 }} placeholder={useinfo.phone} />
               </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ marginBottom: 'auto', marginTop: 'auto' }}>address: </Text>
+                <TextInput value={address} onChangeText={setAddress} style={{ backgroundColor: '#bbb', width: 200, borderRadius: 10, padding: 5 }} placeholder={useinfo.address} />
+              </View>
               <View style={{ flexDirection: 'column' }}>
                 <Text style={{ marginBottom: 'auto', marginTop: 'auto' }}>Gender: {useinfo.gender} </Text>
-                <Text>change gender below</Text>
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                  {gender == 'male' ?
-                    <Button disabled onPress={() => setGender('male')} title='male' />
-                    :
-                    <Button onPress={() => setGender('male')} title='male' />
-                  }
-                  {gender == 'female' ?
-                    <Button disabled onPress={() => setGender('female')} title='female' />
-                    :
-                    <Button onPress={() => setGender('female')} title='female' />
-                  }
+                {useinfo.gender == 'female' || useinfo.gender == 'male' ?
+<></>
+                  :
+                 Gender()
+                }
+                {/* {Gender(useinfo.gender)} */}
                 </View>
               </View>
               <View style={{ flexDirection: 'column'}}>
